@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MinitestTN.BofControllers
 {
-    [Authorize]
+    //[Authorize]
     public class BofFurnitureProductController : Controller
     {
 
