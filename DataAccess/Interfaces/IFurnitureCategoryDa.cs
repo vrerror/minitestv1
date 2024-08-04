@@ -10,13 +10,14 @@ namespace DataAccess.Interfaces
 {
     public interface IFurnitureCategoryDa
     {
-        Task<List<FurnitureCategory>> GetAll();
-        FurnitureCategory GetById(int id);
-        void insert(FurnitureCategory req);
-        Task<FurnitureCategory> isExist(FurnitureCategory data);
-        FurnitureCategory update(FurnitureCategory data);
-        FurnitureCategory Delete(int id, string user);
-        Task<getCategoryDTRes> getDataCatDT(getCategoryDTReq req);
-        FurnitureCategory GetByName(string name);
+        Task<GetCategoryDTRes> GetAll(GetCategoryDTReq req);
+        Task<FurnitureCategory> GetById(int id);
+        Task Insert(FurnitureCategory data);
+        Task Update(FurnitureCategory data);
+        Task Delete(int id, string user);
+        Task<int> GetNextRanking();
+
+
+
     }
 }

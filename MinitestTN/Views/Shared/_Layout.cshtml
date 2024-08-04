@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MinitestTN.styles.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.css" />
 </head>
 <body>
     <header>
@@ -42,7 +44,7 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="" style="padding:20px">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -56,6 +58,13 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <script src="https://kit.fontawesome.com/d8f647289a.js" crossorigin="anonymous"></script>
+    <script src="~/js/moment.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -1,10 +1,12 @@
-﻿using Course.Core.Models;
+﻿using Course.Core.Common;
+using Course.Core.Models;
 using DataAccess.Da;
 using DataAccess.Enities;
 using DataAccess.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MinitestTN.Common;
+using MySqlX.XDevAPI;
 using System;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -13,57 +15,68 @@ namespace MinitestTN.BofControllers
     //[Authorize]
     public class BofFurnitureCategoryController : Controller
     {
-        private readonly IConfiguration configuration;
-        private readonly IFurnitureCategoryDa icategoryDa;
+        
+        private readonly IFurnitureCategoryDa categoryDa;
         private readonly FileHelper fileHelper;
-        private readonly string folderName = "Category";
+      
 
-        //private readonly string UserLogin;
-
-        public BofFurnitureCategoryController(IConfiguration configuration, IFurnitureCategoryDa icategoryDa, FileHelper fileHelper)
+        public BofFurnitureCategoryController(IFurnitureCategoryDa categoryDa, FileHelper fileHelper)
         {
-            //UserLogin = configuration.GetValue<String>("UserLogin");
-            this.icategoryDa = icategoryDa;
+            this.categoryDa = categoryDa;
             this.fileHelper = fileHelper;
         }
         public IActionResult Index()
         {
             return View();
         }
-   
 
-        public IActionResult GatAll()
+        public async Task<IActionResult> GetAll(GetCategoryDTReq req)
         {
-            var category = icategoryDa.GetAll();
-            return Json(category);
+            var data = await categoryDa.GetAll(req);
+            return Json(data);
         }
 
-        public IActionResult GatCatByID(int id)
+        public async Task<IActionResult> GetCatByID(int id)
         {
-            var category = icategoryDa.GetById(id);
-            return Json(category);
+            var data = await categoryDa.GetById(id);
+            return Json(data);
         }
-        public async Task<IActionResult> UpdateCat(FurnitureCategory data, IFormFile file1)
+
+        public async Task<IActionResult> Save(FurnitureCategory data, IFormFile file1)
         {
-            ResponseMessage res = new ResponseMessage();
+            BaseRes res = new();
             try
             {
-                if (file1 != null)
+                if (data.Id == 0)
                 {
-                    if (data.Image != null)
-                        fileHelper.Delete(folderName, data.Image);
+                    if (file1 == null)
+                        throw new ArgumentException("Image is required.");
 
-                    data.Image = await fileHelper.Upload(file1, folderName);
+                    data.Image = await fileHelper.Upload(file1, UploadFolder.Category);
+                    data.CreateBy = User.Identity.Name;
+                    data.CreateDate = DateTime.Now;
 
+                    await categoryDa.Insert(data);
+                }
+                else
+                {
+                    if (file1 != null)
+                    {
+                        data.Image = await fileHelper.Upload(file1, UploadFolder.Category);
+
+                        await DeleteFile(data.Id);
+                    }
+
+                    data.UpdateBy = User.Identity.Name;
+                    data.UpdateDate = DateTime.Now;
+                    await categoryDa.Update(data);
                 }
 
-                data.UpdateBy = User.Identity.Name;
-                data.UpdateDate = DateTime.Now;
-
-                //data.Image = await fileHelper.Upload(file1, folderName);
-
-                icategoryDa.update(data);
-
+                res.Success = true;
+            }
+            catch (ArgumentException ex)
+            {
+                res.Message = ex.Message;
             }
             catch (Exception ex)
             {
@@ -71,69 +84,53 @@ namespace MinitestTN.BofControllers
             }
             return Json(res);
         }
-        public async Task<IActionResult> InsertCat(FurnitureCategory data, IFormFile file1)
+
+        public async Task<IActionResult> Delete(int id)
         {
+            await DeleteFile(id);
 
-            var x = icategoryDa.GetByName(data.Name);
-            if (x == null)
-            {
-
-                if (file1 != null)
-                {
-                    if (data.Image != null)
-                        fileHelper.Delete(folderName, data.Image);
-
-                    data.Image = await fileHelper.Upload(file1, folderName);
-
-                }
-
-                data.CreateBy = User.Identity.Name;
-                data.CreateDate = DateTime.Now;
-
-                icategoryDa.insert(data);
-                //categoryDa.Insert(data);
-
-                return Json("Success.");
-            }
-            else
-            {
-                return Json("Failed.");
-            }
-
-            //data.Image = await fileHelper.Upload(file1, folderName);
-
-            //data.CreateDate = DateTime.Now;
-            //data.CreateBy = User.Identity.Name;
-
-
-            //categoryDa.insert(data);
+            await categoryDa.Delete(id, User.Identity.Name);
 
             return Json(true);
         }
-        public IActionResult DeleteCat(int id)
+
+        private async Task DeleteFile(int id)
         {
-            ResponseMessage res = new ResponseMessage();
-            try
-            {
-                //var data = bLCategory.DeleteCategory(id, User.Identity.Name);
-                var data = icategoryDa.Delete(id, User.Identity.Name);
+            var o = await categoryDa.GetById(id);
 
-                fileHelper.Delete(folderName, data.Image);
-            }
-            catch (Exception ex)
-            {
-                res.Message = "Error : " + ex.Message;
-            }
-
-            return Json(res);
+            if (!string.IsNullOrEmpty(o.Image))
+                fileHelper.Delete(UploadFolder.Category, o.Image);
         }
 
-        public async Task<IActionResult> GetDataCatDT(getCategoryDTReq req)
+        public async Task<IActionResult> GetNextRanking()
         {
-
-            var data = await icategoryDa.getDataCatDT(req);
+            var data = await categoryDa.GetNextRanking();
 
             return Json(data);
         }
+
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
