@@ -36,7 +36,7 @@
 
 
 
-<table class="table table-striped" id="table1" style="width: 100%">
+<table class="table table-striped" id="dt1" style="width: 100%">
     <thead>
         <tr>
             <th>ID</th>
@@ -106,13 +106,15 @@
 
 @section scripts {
     <script>
+ 
+
         const modal1 = new bootstrap.Modal('#modal1', {
         })
 
-        let validator = $("#form1").validate()
+        // let validator = $("#form1").validate();
 
         $(function () {
-            new DataTable("#table1", {
+            new DataTable("#dt1", {
                 displayLength: 20,
                 filter: false,
                 lengthChange: false,
@@ -172,7 +174,8 @@
                 ]
             })
 
-            dropifyInit()
+            
+            // dropifyInit()
 
             $(".section-search input").keypress(function (e) {
                 if (e.which == 13) {
@@ -188,26 +191,26 @@
             });
         })
 
-        onSearch = () => $("#table1").DataTable().ajax.reload()
+        onSearch = () => $("#dt1").DataTable().ajax.reload()
 
         modalAdd = () => {
-            validator.resetForm()
-            dropifyReset()
+            // validator.resetForm()
+            // dropifyReset()
             $("#modal1 input").val("")
             $("#IsActive").prop("checked", true)
             $("#modal1 h5").text("Add Furniture-Category")
 
-            $.getJSON("@Url.Action("GetNextRanking", "BofFurnitureCategoryController")", {}, function (data) {
+            
                 $("#Name").focus()
-                $("#Ranking").val(data)
+                $("#Ranking").val("")
                 modal1.show()
-            })
+            
 
 
         }
 
         modalEdit = id => {
-            validator.resetForm()
+            // validator.resetForm()
 
             $.getJSON("@Url.Action("GetById", "BofFurnitureCategoryController")", { id }, function (data) {
                 if (nvl(data.Image) != "") {
@@ -223,6 +226,7 @@
         }
 
         save = () => {
+            debugger
             var data = new FormData();
             data.append("file1", $("#Image").prop("files")[0])
             data.append("Id", $("#Id").val())
@@ -242,7 +246,7 @@
                         title: "Saved Successfully !",
                         icon: "success"
                     })
-                    $("#table1").DataTable().ajax.reload()
+                    $("#dt1").DataTable().ajax.reload()
                     modal1.hide()
                 } else {
                     Swal.fire({
@@ -271,19 +275,34 @@
                                 title: "DeletedSuccessfully!",
                                 icon: "success",
                             })
-                            $("#table1").DataTable().ajax.reload()
+                            $("#dt1").DataTable().ajax.reload()
                         }
                     })
                 }
             })
         }
 
+        // function nvl(value) {
+        //     return (value === undefined || value === null) ? "" : value;
+        // }
 
-        function dropifyInit() {
-            $('.dropify').dropify();
-        }
+        // function dropifyInit() {
+        //     $('.dropify').dropify();
+        // }
 
+        // function dropifyReset() {
+        //     var drEvent = $('.dropify').dropify();
+        //     drEvent = drEvent.data('dropify');
+        //     drEvent.resetPreview();
+        //     drEvent.clearElement();
+        // }
 
+        // function dropifySetFile(element, url) {
+        //     var drEvent = element.data('dropify');
+        //     drEvent.settings.defaultFile = url;
+        //     drEvent.destroy();
+        //     drEvent.init();
+        // }
 
 
 
