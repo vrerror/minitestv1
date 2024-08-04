@@ -1,0 +1,253 @@
+﻿@{
+    ViewData["Title"] = "Furniture Category";
+
+    string path = "../Category/";
+}
+
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="float-end">
+    <a onclick="modalAdd()" class="btn btn-success"><i class="fa fa-plus"></i></a>
+</div>
+
+
+<table class="table table-striped" id="table1">
+    <thead>
+        <tr>           
+            <th>ID</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Ranking</th>
+            <th>Active</th>
+            <th>Save By</th>
+            <th>Save Date</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<div class="modal" tabindex="-1" id="modal1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-2">
+                    <div class="col-lg-6">
+                        <label>Id</label>
+                        <input type="number" id="Id" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-lg-6">
+                        <label>Name</label>
+                        <input type="text" id="Name" class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-lg-12">
+                        <label>Image</label>
+                        <div><img id="img" /></div>
+                        <input type="file" id="Image" class="form-control" accept="image/*" />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-lg-6">
+                        <label>Ranking</label>
+                        <input type="number" id="Ranking" class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-lg-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="IsActive">
+                            <label class="form-check-label" for="IsActive">
+                                Active
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="btnSave" onclick="insert()" type="button" class="btn btn-success">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script>
+        const modal1 = new bootstrap.Modal('#modal1', {
+        })
+
+        $(function () {
+            loadData()
+        })
+
+        loadData = () => {
+            $.getJSON("@Url.Action("GatAll", "BofFurnitureCategory")", {}, function (data) {
+                bindData(data)
+            })
+        }
+
+        bindData = data => {
+            $("#table1 tbody").empty()
+
+            for (let d of data) {
+                $("#table1 tbody").append("<tr>" +
+                    "<td>" + d.Id + "</td>" +
+                    "<td class='text-center'><img src='@path" + d.Image + "' style='width:60px'></td>" +
+                    "<td>" + d.Name + "</td>" +
+                    "<td>" + d.Ranking + "</td>" +
+                    "<td>" + (d.IsActive ? "<i class='fa-solid fa-check text-success'></i>" : "<i class='fa-solid fa-ban text-danger'></i>") + "</td>" +
+                    "<td>" + (d.UpdateBy == null ? d.CreateBy : d.UpdateBy) + "</td>" +
+                    "<td>" + (d.UpdateDate == null ? d.CreateDate : d.UpdateDate) + "</td>" +
+                    "<td>" +
+                    "<a onclick=\"modalEdit('" + d.Id + "')\" class='btn btn-warning'><i class='fa fa-edit text-white'></i></a> " +
+                    "<a onclick=\"del('" + d.Id + "')\" class='btn btn-danger'><i class='fa fa-trash'></i></a>" +
+                    "</td>" +
+                    "</tr>")
+            }
+        }
+
+        modalAdd = () => {
+            $("#modal1 input").val("")
+            $("#IsActive").prop("checked", true)
+            $("#img").removeAttr("src")
+            // $("#Image").prop("files", "")
+
+            $("#modal1 h5").text("Create")
+            $("#btnSave").attr("onclick", "insert()").text("Create")
+
+            modal1.show()
+
+            $("#Name").focus()
+        }
+
+        insert = () => {
+            let data = new FormData()
+
+            let file = $("#Image").prop("files")[0]
+            data.append('Ranking', $.trim($("#Ranking").val()))
+            data.append('Name', $.trim($("#Name").val()))
+            data.append('IsActive', $("#IsActive").is(":checked"))
+            data.append('File1', file)
+
+            $.ajax("@Url.Action("InsertCat", "BofFurnitureCategory")", {
+                data: data,
+                method: 'post',
+                processData: false,
+                contentType: false,
+                cache: false
+            }).then(function (data) {
+                loadData()
+                modal1.hide()
+                Swal.fire({
+                    title: "Create Successfully!",
+                    icon: "success"
+                })
+            })
+        }
+
+        modalEdit = (id) => {
+            $("#modal1 input").val("")
+
+            $.getJSON("@Url.Action("GatCatByID", "BofFurnitureCategory")", { id }, function (data) {
+
+                $("#Name").val(data.Name)
+                $("#Ranking").val(data.Ranking)
+                $("#Id").val(id)
+                
+                $("#IsActive").prop("checked", data.IsActive)
+                // $("#Image").val(data.Image)
+
+                if (data.Image != null)
+                    $("#img").attr("src", "@path" + data.Image)
+                else
+                    $("#img").removeAttr("src")
+
+
+                $("#modal1 h5").text("Edit")
+                $("#btnSave").attr("onclick", "update('" + id + "','" + data.Image + "')").text("Update")
+
+                modal1.show()
+            })
+        }
+
+        update = (id,img) => {
+
+            let data = new FormData()
+
+
+            data.append('Id', id)
+            data.append('Image', img)
+            data.append('Name', $.trim($("#Name").val()))
+            data.append('Ranking', $.trim($("#Ranking").val()))
+            data.append('IsActive', $("#IsActive").is(":checked"))
+
+            let file = $("#Image").prop("files")[0]
+            data.append('File1', file)
+
+            $.ajax("@Url.Action("UpdateCat", "BofFurnitureCategory")", {
+                data: data,
+                method: 'post',
+                processData: false,
+                contentType: false,
+                cache: false
+            }).then(function (data) {
+
+                if (data.success) {
+
+                    loadData()
+                    modal1.hide()
+                    Swal.fire({
+                        title: "Update Successfully!",
+                        icon: "success",
+                        text: data.Message
+                    })
+                }
+                else {
+                    loadData()
+                    modal1.hide()
+                    Swal.fire({
+                        title: "Fail!",
+                        icon: "error",
+                        text: data.Message
+                    })
+                }
+            })
+
+        }
+
+        del = id => {
+            Swal.fire({
+                title: "Delete " + id + " ?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#dc3545",
+                cancelButtonColor: "#ccc",
+                confirmButtonText: "Delete"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post("@Url.Action("DeleteCat", "BofFurnitureCategory")", { id }, function (data) {
+                        loadData()
+                        Swal.fire({
+                            title: "Delete Successfully!",
+                            icon: "success"
+                        });
+                    })
+                }
+            });
+        }
+
+    </script>
+}
