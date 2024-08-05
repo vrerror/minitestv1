@@ -122,10 +122,10 @@
                 serverSide: true,
                 order: [],
                 ajax: {
-                    url: "@Url.Action("GetAll", "BofFurnitureCategoryController")",
+                    url: "@Url.Action("GetAll", "BofFurnitureCategory")",
                     data: function (d) {
-                        d.orderName = d.order[0] != undefined ? d.columns[d.order[0].column].data : ''
-                        d.orderType = d.order[0] != undefined ? d.order[0].dir : ''
+                        d.orderName = d.order?.[0] ? d.columns[d.order[0].column].data : ''
+                        d.orderType = d.order?.[0] ? d.order[0].dir : ''
                         d.Name = $.trim($("#Keyword").val())
                     }
                 },
