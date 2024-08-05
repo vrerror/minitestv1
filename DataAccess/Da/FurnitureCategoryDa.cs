@@ -58,10 +58,10 @@ namespace DataAccess.Da
             return await db.FurnitureCategory.FindAsync(id);
         }
 
-        public async Task Insert(FurnitureCategory data)
+        public void Insert(FurnitureCategory data)
         {
-            await db.AddAsync(data);
-            await db.SaveChangesAsync();
+             db.AddAsync(data);
+             db.SaveChangesAsync();
         }
 
         public async Task Update(FurnitureCategory data)

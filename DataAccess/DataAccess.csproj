@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Course.Core\Course.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

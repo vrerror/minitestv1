@@ -12,7 +12,7 @@ namespace DataAccess.Interfaces
     {
         Task<GetCategoryDTRes> GetAll(GetCategoryDTReq req);
         Task<FurnitureCategory> GetById(int id);
-        Task Insert(FurnitureCategory data);
+        void Insert(FurnitureCategory data);
         Task Update(FurnitureCategory data);
         Task Delete(int id, string user);
         Task<int> GetNextRanking();

@@ -56,7 +56,7 @@ namespace MinitestTN.BofControllers
                     data.CreateBy = "Nattapong";
                     data.CreateDate = DateTime.Now;
 
-                    await categoryDa.Insert(data);
+                    categoryDa.Insert(data);
                 }
                 else
                 {
