@@ -234,7 +234,7 @@
             data.append("Ranking", $("#Ranking").val())
             data.append("IsActive", $("#IsActive").is(":checked"))
 
-            $.ajax("@Url.Action("Save", "BofFurnitureCategoryController")", {
+            $.ajax("@Url.Action("Save", "BofFurnitureCategory")", {
                 data: data,
                 method: "post",
                 processData: false,
