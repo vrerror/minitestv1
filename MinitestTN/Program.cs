@@ -16,11 +16,16 @@ builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation()
     });
 
 
+//builder.Services.AddDbContext<CourseContext>(options =>
+//    options.UseMySql(builder.Configuration.GetConnectionString("EFMinitestTN"),
+//        new MySqlServerVersion(new Version(8, 0, 39))
+//    )
+//);
+
+
 builder.Services.AddDbContext<CourseContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("EFMinitestTN"),
-        new MySqlServerVersion(new Version(8, 0, 39))
-    )
-);
+    options.UseSqlServer(builder.Configuration.GetConnectionString("EFMinitestTN")));
+
 
 
 
