@@ -58,10 +58,18 @@ namespace DataAccess.Da
             return await db.FurnitureCategory.FindAsync(id);
         }
 
-        public void Insert(FurnitureCategory data)
+        public async Task Insert(FurnitureCategory data)
         {
-             db.AddAsync(data);
-             db.SaveChangesAsync();
+            try
+            {
+                await db.AddAsync(data);
+                await db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                ex = ex;
+            }
+
         }
 
         public async Task Update(FurnitureCategory data)
@@ -94,6 +102,8 @@ namespace DataAccess.Da
 
             return x + 1;
         }
+
+        public FurnitureCategory GetByName(string name) => db.FurnitureCategory.FirstOrDefault(f => f.Name == name && !f.IsDelete);
 
 
 

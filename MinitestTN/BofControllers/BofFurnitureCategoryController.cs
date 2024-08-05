@@ -6,7 +6,6 @@ using DataAccess.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MinitestTN.Common;
-using MySqlX.XDevAPI;
 using System;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -18,7 +17,8 @@ namespace MinitestTN.BofControllers
         
         private readonly IFurnitureCategoryDa categoryDa;
         private readonly FileHelper fileHelper;
-      
+        private readonly string folderName = "Category";
+
 
         public BofFurnitureCategoryController(IFurnitureCategoryDa categoryDa, FileHelper fileHelper)
         {
@@ -47,22 +47,23 @@ namespace MinitestTN.BofControllers
             BaseRes res = new();
             try
             {
+               
                 if (data.Id == 0)
                 {
                     if (file1 == null)
                         throw new ArgumentException("Image is required.");
 
-                    data.Image = await fileHelper.Upload(file1, UploadFolder.Category);
+                    data.Image = await fileHelper.Upload(file1, folderName);
                     data.CreateBy = "Nattapong";
                     data.CreateDate = DateTime.Now;
 
-                    categoryDa.Insert(data);
+                    await categoryDa.Insert(data);
                 }
                 else
                 {
                     if (file1 != null)
                     {
-                        data.Image = await fileHelper.Upload(file1, UploadFolder.Category);
+                        data.Image = await fileHelper.Upload(file1, folderName);
 
                         await DeleteFile(data.Id);
                     }

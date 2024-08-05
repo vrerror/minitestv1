@@ -1,40 +1,51 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Course.Core.Helpers;
+using System.Web.Mvc;
 
 namespace MinitestTN.Common
 {
 
     public class FileHelper
     {
-        private readonly string rootPath;
+        //private readonly string rootPath;
+        private readonly IWebHostEnvironment env;
 
         public FileHelper(IWebHostEnvironment env)
         {
-            rootPath = Path.Combine(env.WebRootPath, "Files");
+            //rootPath = Path.Combine(env.WebRootPath, "Files");
+            this.env = env;
         }
 
         public async Task<string> Upload(IFormFile file, string targetFolder)
         {
-            string outFileName = null;
+            string outFileName = "";
             try
             {
                 if (file != null && file.Length > 0)
                 {
-                    string targetPath = Path.Combine(rootPath, targetFolder);
+                    string targetPath = Path.Combine(env.WebRootPath, targetFolder);
                     bool pathExists = Directory.Exists(targetPath);
                     if (!pathExists)
                     {
                         Directory.CreateDirectory(targetPath);
                     }
 
-                    string saveName = file.FileName.ToUniqueFileName().Replace(" ", "_");
-                    string savePath = Path.Combine(targetPath, saveName);
+                    string nameFime = Path.GetFileNameWithoutExtension(file.FileName);
+                    //string saveName = file.FileName.ToUniqueFileName().Replace(" ", "_");
+                    //string savePath = Path.Combine(targetPath, saveName);
+                    string key = DateTime.Now.ToString("yyMMddHHmmssff");
+                    string ext = Path.GetExtension(file.FileName);
+
+                    outFileName = $"{nameFime}_{key}{ext}";
+
+                    string savePath = Path.Combine(targetPath, outFileName);
 
                     using (var stream = File.Create(savePath))
                     {
                         await file.CopyToAsync(stream);
                     }
-                    outFileName = saveName;
+
+                    //return outFileName;
                 }
             }
             catch (Exception ex)
@@ -48,10 +59,14 @@ namespace MinitestTN.Common
         {
             try
             {
-                string deletePath = Path.Combine(rootPath, targetFolder, deleteFileName);
-                if (File.Exists(deletePath))
+                if (deleteFileName != null)
                 {
-                    File.Delete(deletePath);
+                    string daletePath = Path.Combine(env.WebRootPath, targetFolder, deleteFileName);
+
+                    if (File.Exists(daletePath))
+                    {
+                        File.Delete(daletePath);
+                    }
                 }
             }
             catch (Exception ex)
