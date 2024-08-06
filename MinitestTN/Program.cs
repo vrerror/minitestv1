@@ -24,7 +24,7 @@ builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation()
 
 
 builder.Services.AddDbContext<CourseContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("EFMinitestTN")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MinitestV1")));
 
 
 

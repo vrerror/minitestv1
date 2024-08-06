@@ -15,7 +15,7 @@ namespace DataAccess.Da
 {
     public class FurnitureCategoryDa : IFurnitureCategoryDa
     {
-        private CourseContext db;
+        private readonly CourseContext db;
 
         public FurnitureCategoryDa(CourseContext db)
         {
@@ -62,8 +62,9 @@ namespace DataAccess.Da
         {
             try
             {
-                await db.AddAsync(data);
-                await db.SaveChangesAsync();
+              await db.AddAsync(data);
+              await db.SaveChangesAsync();
+
             }
             catch (Exception ex)
             {
