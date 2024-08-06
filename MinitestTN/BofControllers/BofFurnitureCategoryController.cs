@@ -54,7 +54,7 @@ namespace MinitestTN.BofControllers
                         throw new ArgumentException("Image is required.");
 
                     data.Image = await fileHelper.Upload(file1, folderName);
-                    data.CreateBy = "Nattapong";
+                    data.CreateBy = User.Identity.Name;
                     data.CreateDate = DateTime.Now;
 
                     await categoryDa.Insert(data);
@@ -68,7 +68,7 @@ namespace MinitestTN.BofControllers
                         await DeleteFile(data.Id);
                     }
 
-                    data.UpdateBy = "Nattapong";
+                    data.UpdateBy = User.Identity.Name;
                     data.UpdateDate = DateTime.Now;
                     await categoryDa.Update(data);
                 }

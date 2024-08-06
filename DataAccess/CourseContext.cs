@@ -15,7 +15,15 @@ namespace DataAccess
         public CourseContext(DbContextOptions options) : base(options)
         {
         }
-        
+
+
+        public CourseContext(DbContextOptions<CourseContext> options) : base(options)
+        {
+            
+        }
+
+
+
         public virtual DbSet<FurnitureCategory> FurnitureCategory { get; set; }
         public virtual DbSet<FurnitureProduct> FurnitureProduct { get; set; }
       
