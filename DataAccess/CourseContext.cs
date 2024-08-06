@@ -12,19 +12,16 @@ namespace DataAccess
 {
     public class CourseContext : IdentityDbContext<ApplicationUser> 
     {
+   
+
         public CourseContext(DbContextOptions options) : base(options)
-        {
-        }
-
-
-        public CourseContext(DbContextOptions<CourseContext> options) : base(options)
         {
             
         }
 
 
 
-        public virtual DbSet<FurnitureCategory> FurnitureCategory { get; set; }
+        public DbSet<FurnitureCategory> FurnitureCategory { get; set; }
         public virtual DbSet<FurnitureProduct> FurnitureProduct { get; set; }
       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
