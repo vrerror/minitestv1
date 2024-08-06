@@ -6,6 +6,7 @@ using DataAccess.Enities;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Interfaces;
 using System.Configuration;
+using System.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
