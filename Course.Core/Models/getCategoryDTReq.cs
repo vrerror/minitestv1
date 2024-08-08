@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Course.Core.Models
 {
-    public class GetCategoryDTReq : DTReq
+    public class GetCategoryDtReq : DtReq
     {
-       public string Name { get; set; }
+
+        public string Name { get; set; }
+
     }
 }

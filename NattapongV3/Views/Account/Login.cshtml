@@ -1,0 +1,109 @@
+﻿@model LoginModel
+
+
+
+<div class="row" style="background : #2B2B63">
+    <div class="col">
+
+        <div class="row">
+            @* <div class="col-6">
+            <div class="row" id="R1">
+            <div class="col">
+            <div class="text-center" style="padding : 50px">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Visual_Studio_Icon_2022.svg/1200px-Visual_Studio_Icon_2022.svg.png" width="100px" style="margin: 50px;" />
+            <img src="https://storage.subs.noventiq.com/public/images/market_setting/logotype/54671/SQL1.png" width="150px" style="margin: 50px;" />
+            <img src="https://multishoring.com/wp-content/uploads/2024/04/JavaScript-Symbol.png" width="200px" style="margin: 10px;" />
+            </div>
+            </div>
+            </div>
+
+            <div class="row" id="R2">
+            <div class="col">
+
+            </div>
+            </div>
+
+            <div class="row" id="R3">
+            <div class="col"></div>
+            </div>
+
+            <div class="row" id="R4">
+            <div class="col"></div>
+            </div>
+
+            <div class="row" id="R5">
+            <div class="col"></div>
+            </div>
+
+            <div class="row" id="R6">
+            <div class="col"></div>
+            </div>
+
+
+            </div>
+
+            <div class="col-2">
+
+            </div> *@
+
+            <div class="col-4"></div>
+
+
+
+            <div class="col-4">
+                <div class="border border-0 align-content-center" style="background : #FFFFFF; border-radius : 20px; margin-top: 300px; margin-bottom : 300px">
+                    <div class="">
+                        <div class="w-100 p-3">
+                            <form method="post">
+
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="text" class="form-control" asp-for="UserName" aria-describedby="emailHelp">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control" asp-for="Password">
+                                </div>
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" asp-for="RememberMe">
+                                    <label class="form-check-label" >Remember Me</label>
+                                </div>
+
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary">Sigin</button>
+                                    <a class="btn btn-primary" asp-controller="Account" asp-action="Register">Register</a>
+                                </div>
+                            </form>
+                            
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-4"></div>
+
+
+
+        @* <div class="row">
+        <div class="col">
+
+
+
+        </div>
+        </div> *@
+
+    </div>
+</div>
+
+
+
+@* <form method="Post">
+    <input type="text" asp-for="UserName" />
+    <input type="password" asp-for="Password" />
+    <input type="checkbox" asp-for="RememberMe" />
+    <input type="submit" />
+</form>
+ *@

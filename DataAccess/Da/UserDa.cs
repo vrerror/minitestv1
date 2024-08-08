@@ -1,4 +1,4 @@
-﻿using DataAccess.Enities;
+﻿using DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -20,16 +20,11 @@ namespace DataAccess.Da
         {
             data.NormalizedUserName = data.UserName.ToUpper();
             data.NormalizedEmail = data.Email.ToUpper();
-
-            data.FirstName = data.FirstName.ToUpper();
-            data.LastName = data.LastName.ToUpper();
-            data.PhoneNumber = data.PhoneNumber.ToUpper();
-            data.UserName = data.UserName.ToLower();
+            data.UserName = data.UserName.ToLower(); //ดักข้อมูลให้ข้อมูลที่พิมพ์เข้ามาส่งไปเก็บตัวเล็กทั้งหมด
             data.Email = data.Email.ToLower();
 
             var passwordHasher = new PasswordHasher<ApplicationUser>();
             data.PasswordHash = passwordHasher.HashPassword(data, data.Password);
-
 
 
             await db.AddAsync(data);

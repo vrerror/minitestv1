@@ -1,0 +1,25 @@
+﻿@using DataAccess.Entities
+<h1>Register</h1>
+@model ApplicationUser
+
+<form method="post">
+
+<lable>First Name</lable>
+<input type="text" class="form-control" asp-for="FirstName" />
+
+<lable>LastName</lable>
+    <input type="text" class="form-control" asp-for="LastName" />
+
+<lable>UserName</lable>
+    <input type="text" class="form-control" asp-for="UserName" />
+
+<lable>Password</lable>
+    <input type="password" class="form-control" asp-for="Password" />
+
+<lable>Email</lable>
+    <input type="email" class="form-control" asp-for="Email" />
+
+<button type="submit" class="btn btn-primary">Save</button>
+
+
+</form>

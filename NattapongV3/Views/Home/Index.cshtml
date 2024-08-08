@@ -1,0 +1,14 @@
+﻿<img src="~/image/1.png "  />
+<img src="~/image/2.png "  />
+<img src="~/image/3.png "  />
+<img src="~/image/4.png "  />
+
+@if (User.Identity.Name != null)
+{
+    <h1>Welcome, @User.Identity.Name !</h1>
+    <a class="btn btn-danger" asp-controller="Account" asp-action="Logout"><i class="fa fa-power-off"></i> Logout</a>
+}
+
+
+
+

@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\assets\fonts\et-line-font\.DS_Store" />
+    <None Include="wwwroot\assets\fonts\et-line-font\fonts\.DS_Store" />
+    <None Include="wwwroot\assets\revolution\.DS_Store" />
+    <None Include="wwwroot\assets\revolution\assets\.DS_Store" />
+    <None Include="wwwroot\assets\revolution\css\.DS_Store" />
+    <None Include="wwwroot\assets\revolution\fonts\.DS_Store" />
+    <None Include="wwwroot\assets\revolution\fonts\font-awesome\.DS_Store" />
+    <None Include="wwwroot\assets\revolution\fonts\pe-icon-7-stroke\.DS_Store" />
+    <None Include="wwwroot\assets\revolution\php\.DS_Store" />
+    <None Include="wwwroot\assets\revolution\php\twitter\.DS_Store" />
+    <None Include="wwwroot\js\bof.js" />
+    <None Include="wwwroot\js\dataTables.js.js" />
+    <None Include="wwwroot\js\dropify.js" />
+    <None Include="wwwroot\js\jquery.validate.min.js" />
+    <None Include="wwwroot\js\moment.js" />
+    <None Include="wwwroot\js\numeral.min.js" />
+    <None Include="wwwroot\js\site.js" />
+    <None Include="wwwroot\js\sweetalert2.all.js" />
+    <None Include="wwwroot\lightbox\js\lightbox-plus-jquery.js" />
+    <None Include="wwwroot\lightbox\js\lightbox-plus-jquery.min.js" />
+    <None Include="wwwroot\lightbox\js\lightbox-plus-jquery.min.map" />
+    <None Include="wwwroot\lightbox\js\lightbox.js" />
+    <None Include="wwwroot\lightbox\js\lightbox.min.js" />
+    <None Include="wwwroot\lightbox\js\lightbox.min.map" />
+    <None Include="wwwroot\summernote\font\summernote.woff2" />
+    <None Include="wwwroot\summernote\summernote.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj" />
+    <ProjectReference Include="..\Course.Core\Course.Core.csproj" />
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Files\Category\" />
+  </ItemGroup>
+
+</Project>

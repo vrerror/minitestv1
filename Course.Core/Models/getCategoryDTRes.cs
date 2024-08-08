@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Course.Core.Models
 {
-    public class GetCategoryDTRes : DTRes
+
+    public class GetCategoryDtRes : DtRes
     {
-        public List<CategoryDT> data {  get; set; }
+        public List<GetCategoryDtRes2> data { get; set; }
     }
 
-    public class CategoryDT
+       public class GetCategoryDtRes2
     {
         public int Id { get; set; }
         public string Name { get; set; }
