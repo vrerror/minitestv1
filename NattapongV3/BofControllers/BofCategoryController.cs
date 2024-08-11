@@ -52,7 +52,6 @@ namespace MiniWeb.BofControllers
 
                     if (file1 == null)
                         throw new ArgumentException("Image is required.");
-                    
 
                     data.Image = await fileHelper.Upload(file1, UploadFolder.Category);
                     data.CreateBy = User.Identity.Name;
@@ -62,10 +61,10 @@ namespace MiniWeb.BofControllers
                 }
                 else
                 {
+
                     if (file1 != null)
                     {
                         data.Image = await fileHelper.Upload(file1, UploadFolder.Category);
-
                         await DeleteFile(data.Id);
                     }
 
