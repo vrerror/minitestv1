@@ -28,6 +28,7 @@ builder.Services.AddSession();
 builder.Services.AddScoped<FileHelper>();
 builder.Services.AddScoped<UserDa>();
 builder.Services.AddScoped<ICategoryDa, ProductTypeDa>();
+builder.Services.AddScoped<IProductDa, ProductDa>();
 
 
 

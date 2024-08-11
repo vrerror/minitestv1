@@ -15,6 +15,7 @@ namespace Course.Core.Common
     public static class UploadFolder
     {
         public const string Category = nameof(Category);
+        public const string Product = nameof(Product);
 
 
     }
