@@ -26,7 +26,12 @@ namespace MiniWeb.BofControllers
             return View();
         }
 
+        public async Task<IActionResult> GetById(int id)
+        {
+            var data = await productDa.GetById(id);
 
+            return Json(data);
+        }
 
 
 

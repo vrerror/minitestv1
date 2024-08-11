@@ -16,8 +16,9 @@ namespace DataAccess
         {
         }
 
-        public DbSet<CategoryET> CategoryET { get; set; }
+        public DbSet<ProductType> ProductType { get; set; }
         public DbSet<Product> Product { get; set; }
+        public DbSet<ProductImage> ProductImage { get; set; }
 
 
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

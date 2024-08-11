@@ -36,7 +36,7 @@ namespace MiniWeb.BofControllers
             return Json(data);
         }
 
-        public async Task<IActionResult> Save(CategoryET data, IFormFile file1)
+        public async Task<IActionResult> Save(ProductType data, IFormFile file1)
         {
             BaseRes res = new();
             try

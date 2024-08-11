@@ -10,9 +10,8 @@ namespace DataAccess.Interface
 {
     public interface IProductDa
     {
-
-      
-
+        Task<List<Ddl>> GetTypePd();
+        Task<Product> GetById(int id);
 
 
 

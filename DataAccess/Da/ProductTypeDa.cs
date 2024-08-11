@@ -9,23 +9,23 @@ using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 namespace DataAccess.Da
 {
-    public class CategoryDa : ICategoryDa
+    public class ProductTypeDa : ICategoryDa
     {
         private readonly CourseContext db;
 
-        public CategoryDa(CourseContext db)
+        public ProductTypeDa(CourseContext db)
         {
             this.db = db;
         }
 
-        public async Task<CategoryET> GetById(int id)
+        public async Task<ProductType> GetById(int id)
         {
-            return await db.CategoryET.FindAsync(id);
+            return await db.ProductType.FindAsync(id);
         }
 
         public async Task<GetCategoryDtRes> GetAll(GetCategoryDtReq req)
         {
-            var raw = db.CategoryET.Where(w => !w.IsDelete);
+            var raw = db.ProductType.Where(w => !w.IsDelete);
 
             if (!string.IsNullOrEmpty(req.Name))
                 raw = raw.Where(w => w.Name.Contains(req.Name));
@@ -56,7 +56,7 @@ namespace DataAccess.Da
 
       
 
-        public async Task Insert(CategoryET data)
+        public async Task Insert(ProductType data)
         {
 
 
@@ -65,7 +65,7 @@ namespace DataAccess.Da
 
         }
 
-        public async Task Update(CategoryET data)
+        public async Task Update(ProductType data)
         {
             var o = await GetById(data.Id);
             o.Ranking = data.Ranking;
@@ -91,12 +91,12 @@ namespace DataAccess.Da
 
         public async Task<int> GetNextRanking()
         {
-            var x = await db.CategoryET.Where(w => !w.IsDelete).OrderByDescending(u => u.Ranking).Select(s => s.Ranking).FirstOrDefaultAsync();
+            var x = await db.ProductType.Where(w => !w.IsDelete).OrderByDescending(u => u.Ranking).Select(s => s.Ranking).FirstOrDefaultAsync();
 
             return x + 1;
         }
 
-        public CategoryET GetByName(string name) => db.CategoryET.FirstOrDefault(f => f.Name == name && !f.IsDelete);
+        public ProductType GetByName(string name) => db.ProductType.FirstOrDefault(f => f.Name == name && !f.IsDelete);
 
 
 

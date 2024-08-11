@@ -27,7 +27,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 builder.Services.AddSession();
 builder.Services.AddScoped<FileHelper>();
 builder.Services.AddScoped<UserDa>();
-builder.Services.AddScoped<ICategoryDa, CategoryDa>();
+builder.Services.AddScoped<ICategoryDa, ProductTypeDa>();
 
 
 

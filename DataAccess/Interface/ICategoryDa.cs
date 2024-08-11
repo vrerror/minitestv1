@@ -12,12 +12,12 @@ namespace DataAccess.Interface
     {
 
         Task<GetCategoryDtRes> GetAll(GetCategoryDtReq req);
-        Task<CategoryET> GetById(int id);
-        Task Insert(CategoryET data);
-        Task Update(CategoryET data);
+        Task<ProductType> GetById(int id);
+        Task Insert(ProductType data);
+        Task Update(ProductType data);
         Task Delete(int id, string user);
         Task<int> GetNextRanking();
-        CategoryET GetByName(string name);
+        ProductType GetByName(string name);
 
 
 
