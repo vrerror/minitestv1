@@ -13,31 +13,16 @@ namespace DataAccess.Da
     public class ProductDa : IProductDa
     {
         private readonly CourseContext db;
-
         public ProductDa(CourseContext db)
         {
             this.db = db;
         }
-
-        public async Task<List<Ddl>> GetTypePd() => await db.Product.Where(w => !w.IsDelete && w.IsActive)
-                  .OrderBy(o => o.Ranking)
-                  .Select(s => new Ddl
-                  {
-                      Name = s.Name,
-                      Value = s.Id
-                  })
-                  .ToListAsync();
-
         public async Task<Product> GetById(int id)
         {
             return await db.Product.FindAsync(id);
         }
-
-        public async Task<List<ProductImage>> GetImage(int id)
-        {
-            return await db.ProductImage.Where(w => !w.IsDelete && w.ProductId == id).ToListAsync();
-        }
-
+        public async Task<ProductImage> GetImageById(int id) => await db.ProductImage.FindAsync(id);
+        public async Task<List<ProductImage>> GetImage(int id) => await db.ProductImage.Where(w => !w.IsDelete && w.ProductId == id).ToListAsync();
         public async Task<GetProductDtRes> GetDt(GetProductDtReq req)
         {
             var raw = db.Product.Where(w => !w.IsDelete);
@@ -87,7 +72,6 @@ namespace DataAccess.Da
                 recordsTotal = count
             };
         }
-
         public async Task<GetProductImageDtRes> GetImageDt(GetProductImageDtReq req)
         {
             var raw = db.ProductImage.Where(w => !w.IsDelete && w.ProductId == req.ProductId).OrderBy(o => o.Ranking);
@@ -112,7 +96,6 @@ namespace DataAccess.Da
                 recordsTotal = count
             };
         }
-
         public async Task<List<Ddl>> GetTypeDdl() => await db.ProductType.Where(w => !w.IsDelete && w.IsActive)
                 .OrderBy(o => o.Ranking)
                 .Select(s => new Ddl
@@ -121,14 +104,12 @@ namespace DataAccess.Da
                     Value = s.Id
                 })
                 .ToListAsync();
-
         public async Task<int> GetNextRanking(int typeId)
         {
             var x = await db.Product.Where(w => !w.IsDelete && w.ProductTypeId == typeId).OrderByDescending(u => u.Ranking).Select(s => s.Ranking).FirstOrDefaultAsync();
 
             return x + 1;
         }
-
         public async Task<List<GetProductWebRes>> GetWeb()
         {
             var data = await (from r in db.Product
@@ -157,8 +138,6 @@ namespace DataAccess.Da
 
             return data;
         }
-
-
         public async Task<GetProductDetailRes> GetDetail(int id)
         {
             var r = await GetById(id);
@@ -177,7 +156,6 @@ namespace DataAccess.Da
 
             return data;
         }
-
         public async Task Insert(Product data, List<ProductImage> images)
         {
             await db.AddAsync(data);
@@ -185,8 +163,6 @@ namespace DataAccess.Da
 
             await InsertImage(data, images);
         }
-
-
         public async Task Update(Product data, List<ProductImage> images, List<ProductImage> rankings)
         {
             var o = await GetById(data.Id);
@@ -225,7 +201,6 @@ namespace DataAccess.Da
 
             await InsertImage(data, images);
         }
-
         public async Task Delete(int id, string user)
         {
             var o = await GetById(id);
@@ -235,8 +210,6 @@ namespace DataAccess.Da
 
             await db.SaveChangesAsync();
         }
-
-
         public async Task DeleteImage(int id, string user)
         {
             var o = await db.ProductImage.FindAsync(id);
@@ -247,7 +220,6 @@ namespace DataAccess.Da
 
             await db.SaveChangesAsync();
         }
-
         private async Task InsertImage(Product data, List<ProductImage> images)
         {
             if (images.Any())
