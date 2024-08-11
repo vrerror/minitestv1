@@ -174,8 +174,8 @@
                 ]
             })
 
-
-            // dropifyInit()
+            
+            $("#Image").dropify();
 
             $(".section-search input").keypress(function (e) {
                 if (e.which == 13) {
@@ -200,19 +200,19 @@
             $("#IsActive").prop("checked", true)
             $("#modal1 h5").text("Add Furniture-Category")
 
+            $.getJSON("@Url.Action("GetNextRanking", "BofCategory")", {}, function (data) {
+                $("#Name").focus()
+                $("#Ranking").val(data)
+                modal1.show()
 
-            $("#Name").focus()
-            $("#Ranking").val("")
-            modal1.show()
-
-
+            })
 
         }
 
         modalEdit = id => {
             validator.resetForm()
 
-            $.getJSON("@Url.Action("GetById", "BofCategory")", { id }, function (data) {
+            $.getJSON("@Url.Action("GetCatByID", "BofCategory")", { id }, function (data) {
                 if (nvl(data.Image) != "") {
                     dropifySetFile($("#Image").data('dropify'), "@path/" + data.Image);
                 }
@@ -226,7 +226,6 @@
         }
 
         save = () => {
-            debugger
             var data = new FormData();
             data.append("file1", $("#Image").prop("files")[0])
             data.append("Id", $("#Id").val())
