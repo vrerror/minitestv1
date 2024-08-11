@@ -18,6 +18,10 @@ namespace DataAccess.Da
             this.db = db;
         }
 
+        public async Task<CategoryET> GetById(int id)
+        {
+            return await db.CategoryET.FindAsync(id);
+        }
 
         public async Task<GetCategoryDtRes> GetAll(GetCategoryDtReq req)
         {
@@ -50,23 +54,14 @@ namespace DataAccess.Da
             };
         }
 
-        public async Task<CategoryET> GetById(int id)
-        {
-            return await db.CategoryET.FindAsync(id);
-        }
+      
 
         public async Task Insert(CategoryET data)
         {
-            try
-            {
-                await db.AddAsync(data);
-                await db.SaveChangesAsync();
 
-            }
-            catch (Exception ex)
-            {
-                ex = ex;
-            }
+
+            await db.AddAsync(data);
+            await db.SaveChangesAsync();
 
         }
 

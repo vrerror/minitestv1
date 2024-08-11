@@ -24,15 +24,15 @@ namespace MiniWeb.BofControllers
             return View();
         }
 
-        public async Task<IActionResult> GetAll(GetCategoryDtReq req)
-        {
-            var data = await categoryDa.GetAll(req);
-            return Json(data);
-        }
-
         public async Task<IActionResult> GetCatByID(int id)
         {
             var data = await categoryDa.GetById(id);
+            return Json(data);
+        }
+
+        public async Task<IActionResult> GetAll(GetCategoryDtReq req)
+        {
+            var data = await categoryDa.GetAll(req);
             return Json(data);
         }
 
@@ -44,8 +44,15 @@ namespace MiniWeb.BofControllers
 
                 if (data.Id == 0)
                 {
+                    var x = categoryDa.GetByName(data.Name);
+                    if(x != null && (x.Name== data.Name))
+                    {
+                        throw new ArgumentException("Duplicate Name");
+                    };
+
                     if (file1 == null)
                         throw new ArgumentException("Image is required.");
+                    
 
                     data.Image = await fileHelper.Upload(file1, UploadFolder.Category);
                     data.CreateBy = User.Identity.Name;
