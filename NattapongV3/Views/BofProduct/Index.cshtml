@@ -1,5 +1,515 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Course.Core.Models
+@model DataAccess.Entities.Product
 @{
+    // Layout = "~/Views/Shared/_BofLayout.cshtml";
+
+    ViewData["Title"] = "Product";
+
+    string path = Url.Content("~/Files/" + Course.Core.Common.UploadFolder.Product);
+}
+
+<h2 class="text-center">@ViewData["Title"]</h2>
+
+<div class="row section-search">
+    <div class="col-md-3 mb-1">
+        <select id="TypeId" class="form-select" required onchange="onSearch()">
+            <option value=""></option>
+            @foreach (Ddl a in ViewBag.Types)
+            {
+                <option value="@a.Value">@(a.Name)</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-3 mb-1">
+        <div class="input-group">
+            <input type="text" id="Name" class="form-control" placeholder="Name" />
+            <a onclick="onSearch()" class="btn btn-outline-secondary"><i class="fa fa-search"></i></a>
+        </div>
+    </div>
+    <div class="col-md-5"></div>
+    <div class="col-md-1 text-end">
+        <a onclick="modalAdd()" class="btn btn-success"><i class="fa fa-plus"></i></a>
+    </div>
+</div>
+
+<div style="overflow-x: auto">
+    <table class="display mt-1" id="dt1" style="width: 100%">
+        <thead>
+            <tr>
+                <th></th>
+                <th>ProductType</th>
+                <th>Name</th>
+                <th class="text-center text-nowrap">Active</th>
+                <th class="text-center">Ranking</th>
+                <th class="text-center text-nowrap">SavedBy</th>
+                <th class="text-center text-nowrap">SavedDate</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal " tabindex="-1" id="modal1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="detail-tab" data-bs-toggle="tab" data-bs-target="#detail" type="button" role="tab" aria-controls="detail" aria-selected="true">Detail"</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="images-tab" data-bs-toggle="tab" data-bs-target="#images" type="button" role="tab" aria-controls="images" aria-selected="false">"Image"</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="detail" role="tabpanel" aria-labelledby="detail-tab">
+                        <form id="form1">
+                            <input type="hidden" id="Id" />
+                            <div class="row mb-2">
+                                <div class="col-md-6 col-lg-6">
+                                    <label class="form-label">"ProductType"</label>
+                                    <select asp-for="ProductTypeId" class="form-select" required onchange="getNextRanking()">
+                                        <option value=""></option>
+                                        @foreach (Ddl a in ViewBag.Types)
+                                        {
+                                            <option value="@a.Value">@a.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-6 col-lg-6">
+                                    <label class="form-label">"Name"</label>
+                                    <input type="text" asp-for="Name" maxlength="100" class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-6 col-lg-6">
+                                    <label class="form-label">"Title"</label>
+                                    <input type="text" asp-for="Title" maxlength="120" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-6 col-lg-6">
+                                    <label class="form-label">"ShortDetail"</label>
+                                    <input type="text" asp-for="ShortDetail" maxlength="250" class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-label">"Detail"</label>
+                                        <textarea asp-for="Detail" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-3 col-lg-3">
+                                    <label class="form-label">"Ranking"</label>
+                                    <input type="number" asp-for="Ranking" class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" asp-for="IsActive">
+                                        <label class="form-check-label">"Active"</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label for="Images" class="form-label">UploadMultipleImages"</label>
+                                <input class="form-control" type="file" id="Images" accept="image/*" multiple>
+                            </div>
+                        </div>
+                        <div style="overflow-x: auto" id="section-dtImg">
+                            <table class="display mt-1" id="dtImg" style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th class="text-center">"Ranking"</th>
+                                        <th class="text-center text-nowrap">"SavedBy"</th>
+                                        <th class="text-center text-nowrap">"SavedDate"</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">"Close"</button>
+                <button id="btnSave" type="button" class="btn btn-success">"Save"</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        const modal1 = new bootstrap.Modal('#modal1', {
+        })
+
+        let validator = $("#form1").validate()
+        let editorToolbar = [
+            ['font', ['bold', 'underline', 'clear']],
+            ['para', ['ul', 'ol']],
+            ['view', ['codeview']]
+        ]
+
+        $(function () {
+            $("form").each(function () {
+                if ($(this).data("validator"))
+                    $(this).data("validator").settings.ignore = ".note-editor *";
+            })
+
+            let groupColumn = 0;
+            new DataTable("#dt1", {
+                displayLength: 10,
+                filter: false,
+                lengthChange: false,
+                processing: true,
+                serverSide: true,
+                order: [],
+                ajax: {
+                    url: "@Url.Action("GetDt", "BofProduct")",
+                    data: function (d) {
+                        d.orderName = d.order[0] != undefined ? d.columns[d.order[0].column].data : ''
+                        d.orderType = d.order[0] != undefined ? d.order[0].dir : ''
+                        d.Name = $.trim($("#Name").val())
+                        d.TypeId = $("#TypeId").val()
+                    }
+                },
+                columns: [
+                    { data: null, sortable: false },
+                    {
+                        data: "Image",
+                        sortable: false,
+                        render: function (o) {
+                            if (nvl(o) != "") {
+                                let img = "@path/" + o
+                                return "<a href='" + img + "' data-lightbox='x'><img src='" + img + "' width='60'></a>"
+                            }
+
+                            return ""
+                        }
+                    },
+                    { data: "Name", sortable: false },
+                    // { data: "NameTh", sortable: false },
+                    {
+                        data: "IsActive",
+                        sortable: false,
+                        className: 'text-center',
+                        render: function (status) {
+                            return status ? "<i class='fa fa-check text-success'></i>" : "<i class='fa fa-ban text-danger'></i>";
+                        }
+                    },
+                    { data: "Ranking", sortable: false, className: 'text-center' },
+                    { data: "CreateBy", sortable: false, className: 'text-center' },
+                    {
+                        data: "CreateDate",
+                        sortable: false,
+                        className: 'text-center',
+                        render: function (time) {
+                            return moment(time).format("DD/MM/YYYY HH:mm")
+                        }
+                    },
+                    {
+                        data: null,
+                        sortable: false,
+                        className: 'text-nowrap',
+                        render: function (o) {
+                            let a = "<a onclick=\"modalEdit('" + o.Id + "')\" class='btn btn-warning'><i class='fa fa-edit text-white'></i></a> " +
+                                "<a onclick=\"del('" + o.Id + "', '" + o.Name + "')\" class='btn btn-danger'><i class='fa fa-trash'></i></a>"
+
+                            return a
+                        }
+                    },
+                ],
+                "columnDefs": [
+                    { "visible": false, "targets": groupColumn }
+                ],
+                "drawCallback": function () {
+                    var api = this.api();
+                    var rows = api.rows({ page: 'current' }).nodes()
+                    var last = null;
+
+                    api.column(groupColumn, { page: 'current' }).data().each(function (o, i) {
+                        if (o == undefined)
+                            return
+
+                        let x = o.Type
+                        if (last !== x) {
+                            $(rows).eq(i).before(
+                                "<tr class='group'><td colspan='9'>" + x + "</td></tr>"
+                            );
+
+                            last = x;
+                        }
+                    });
+                }
+            })
+
+            new DataTable("#dtImg", {
+                displayLength: 10,
+                filter: false,
+                lengthChange: false,
+                processing: true,
+                serverSide: true,
+                order: [],
+                ajax: {
+                    url: "@Url.Action("GetImageDt", "BofProduct")",
+                    data: function (d) {
+                        d.orderName = d.order[0] != undefined ? d.columns[d.order[0].column].data : ''
+                        d.orderType = d.order[0] != undefined ? d.order[0].dir : ''
+                        d.ProductId = $("#Id").val()
+                    }
+                },
+                columns: [
+                    {
+                        data: "Image",
+                        sortable: false,
+                        render: function (o) {
+                            if (nvl(o) != "") {
+                                let img = "@path/" + o
+                                return "<a href='" + img + "' data-lightbox='x'><img src='" + img + "' width='60'></a>"
+                            }
+
+                            return ""
+                        }
+                    },
+                    {
+                        data: null,
+                        className: 'text-center',
+                        sortable: false,
+                        render: function (o) {
+                            return "<input type='number' id='Ranking_" + o.Id + "' value='" + o.Ranking + "' class='text-center' style='width: 80px'>"
+                        }
+                    },
+                    { data: "CreateBy", sortable: false, className: 'text-center' },
+                    {
+                        data: "CreateDate",
+                        sortable: false,
+                        className: 'text-center',
+                        render: function (time) {
+                            return moment(time).format("DD/MM/YYYY HH:mm")
+                        }
+                    },
+                    {
+                        data: null,
+                        sortable: false,
+                        className: 'text-nowrap',
+                        render: function (o) {
+                            let a = "<a onclick=\"delImg('" + o.Id + "', '" + o.Ranking + "')\" class='btn btn-danger'><i class='fa fa-trash'></i></a>"
+
+                            return a
+                        }
+                    },
+                ]
+            })
+
+            $("#Detail").summernote({
+                height: 350,
+                toolbar: editorToolbar
+            })
+
+            $(".section-search input").keypress(function (e) {
+                if (e.which == 13) {
+                    onSearch()
+                    return false
+                }
+            })
+
+            $("#btnSave").click(function () {
+                if ($("#form1").valid()) {
+                    save();
+                }
+            });
+        })
+
+        onSearch = () => $("#dt1").DataTable().ajax.reload()
+
+        getNextRanking = () => {
+            $.getJSON("@Url.Action("GetNextRanking", "BofProduct")", { typeId: $("#ProductTypeId").val() }, function (data) {
+                $("#Ranking").val(data)
+            })
+        }
+
+        modalAdd = () => {
+            validator.resetForm()
+            $("#modal1 input").val("")
+            $("#Images").val("")
+            $("#ProductTypeId").val("")
+            $("#IsActive").prop("checked", true)
+            $("#Detail").summernote("code", "")
+            // $("#DetailTh").summernote("code", "")
+
+            $("#modal1 h5").text("Add")
+
+            $("#section-dtImg").hide()
+
+            $("#detail-tab").click()
+            modal1.show()
+        }
+
+        modalEdit = id => {
+            validator.resetForm()
+            $("#Images").val("")
+
+            $.getJSON("@Url.Action("GetById", "BofProduct")", { id }, function (data) {
+
+                $("#Id").val(data.Id)
+                $("#ProductTypeId").val(data.ProductTypeId)
+                // $("#YoutubeUrl").val(data.YoutubeUrl)
+                $("#Name").val(data.Name)
+                // $("#NameTh").val(data.NameTh)
+                $("#Title").val(data.Title)
+                // $("#TitleTh").val(data.TitleTh)
+                $("#ShortDetail").val(data.ShortDetail)
+                // $("#ShortDetailTh").val(data.ShortDetailTh)
+                $("#Detail").summernote("code", data.Detail)
+                // $("#DetailTh").summernote("code", data.DetailTh)
+                $("#Ranking").val(data.Ranking)
+                $("#IsActive").prop("checked", data.IsActive)
+
+                $("#modal1 h5").text("Edit")
+
+                $("#section-dtImg").show()
+                $("#dtImg").DataTable().ajax.reload()
+
+                $("#detail-tab").click()
+                modal1.show()
+            });
+        }
+
+        save = () => {
+            var data = new FormData();
+
+            var files = $("#Images").prop("files");
+            if (files.length > 0) {
+                for (let f of files) {
+                    data.append('files', f);
+                }
+            }
+
+            data.append("Id", $("#Id").val())
+            data.append("ProductTypeId", $("#ProductTypeId").val())
+            // data.append("YoutubeUrl", $.trim($("#YoutubeUrl").val()))
+            data.append("Name", $.trim($("#Name").val()))
+            // data.append("NameTh", $.trim($("#NameTh").val()))
+            data.append("Title", $.trim($("#Title").val()))
+            // data.append("TitleTh", $.trim($("#TitleTh").val()))
+            data.append("ShortDetail", $.trim($("#ShortDetail").val()))
+            // data.append("ShortDetailTh", $.trim($("#ShortDetailTh").val()))
+            data.append("Detail", $("#Detail").summernote("code"))
+            // data.append("DetailTh", $("#DetailTh").summernote("code"))
+            data.append("Ranking", $("#Ranking").val())
+            data.append("IsActive", $("#IsActive").is(":checked"))
+
+            let rankings = []
+            let inputs = $("[id*=Ranking_]")
+            for (let r of inputs) {
+
+                if (r.value == "")
+                    r.value = 0
+
+                rankings.push({ Id: parseInt(r.id.split('_')[1]), Ranking: parseInt(r.value) })
+            }
+
+            data.append("Rankings", JSON.stringify(rankings))
+
+            $.ajax("@Url.Action("Save", "BofProduct")", {
+                data: data,
+                method: "post",
+                processData: false,
+                contentType: false,
+                cache: false,
+            }).then(function (data) {
+                if (data.Success) {
+                    Swal.fire({
+                        title: "Saved Successfully!",
+                        icon: "success"
+                    })
+
+                    if ($("#Id").val() != "") {
+                        $("#dtImg").DataTable().ajax.reload()
+                        $("#dt1").DataTable().ajax.reload()
+                        $("#Images").val("")
+                    } else {
+                        modal1.hide()
+                        $("#dt1").DataTable().ajax.reload()
+                    }
+                } else {
+                    Swal.fire({
+                        title: data.Message,
+                        icon: "warning"
+                    })
+                }
+            })
+        }
+
+        del = (id, key) => {
+            Swal.fire({
+                title: "Delete",
+                text: "ConfirmDeleteMessage" + key + " ?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#dc3545",
+                cancelButtonColor: "#ddd",
+                confirmButtonText: "Confirm",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post("@Url.Action("Delete", "BofProduct")", { id }, function (data) {
+                        if (data) {
+                            Swal.fire({
+                                title: "Deleted Successfully!",
+                                icon: "success"
+                            })
+                            $("#dt1").DataTable().ajax.reload()
+                        }
+                    })
+                }
+            })
+        }
+
+        delImg = (id, key) => {
+            Swal.fire({
+                title: "Delete",
+                text: "ConfirmDeleteMessage " + key + " ?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#dc3545",
+                cancelButtonColor: "#ddd",
+                confirmButtonText: "Confirm",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post("@Url.Action("DeleteImage", "BofProduct")", { id }, function (data) {
+                        if (data) {
+                            Swal.fire({
+                                title: "Deleted Successfully !",
+                                icon: "success"
+                            })
+                            $("#dtImg").DataTable().ajax.reload()
+                        }
+                    })
+                }
+            })
+        }
+    </script>
 }

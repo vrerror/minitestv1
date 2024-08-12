@@ -54,6 +54,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Files\Category\" />
+    <Folder Include="wwwroot\Files\Product\" />
   </ItemGroup>
 
 </Project>
