@@ -37,7 +37,7 @@
         <thead>
             <tr>
                 <th></th>
-                <th>ProductType</th>
+                <th class="text-left" >ProductType</th>
                 <th>Name</th>
                 <th class="text-center text-nowrap">Active</th>
                 <th class="text-center">Ranking</th>
@@ -73,7 +73,7 @@
                             <input type="hidden" id="Id" />
                             <div class="row mb-2">
                                 <div class="col-md-6 col-lg-6">
-                                    <label class="form-label">"ProductType"</label>
+                                    <label class="form-label">ProductType</label>
                                     <select asp-for="ProductTypeId" class="form-select" required onchange="getNextRanking()">
                                         <option value=""></option>
                                         @foreach (Ddl a in ViewBag.Types)
@@ -85,33 +85,33 @@
                             </div>
                             <div class="row mb-2">
                                 <div class="col-md-6 col-lg-6">
-                                    <label class="form-label">"Name"</label>
-                                    <input type="text" asp-for="Name" maxlength="100" class="form-control" required />
+                                    <label class="form-label">ProductName</label>
+                                    <input type="text" asp-for="ProductName" maxlength="100" class="form-control" required />
                                 </div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col-md-6 col-lg-6">
-                                    <label class="form-label">"Title"</label>
+                                    <label class="form-label">Title</label>
                                     <input type="text" asp-for="Title" maxlength="120" class="form-control" />
                                 </div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col-md-6 col-lg-6">
-                                    <label class="form-label">"ShortDetail"</label>
+                                    <label class="form-label">ShortDetail</label>
                                     <input type="text" asp-for="ShortDetail" maxlength="250" class="form-control" required />
                                 </div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col-md-6 col-lg-6">
                                     <div class="form-group">
-                                        <label class="form-label">"Detail"</label>
+                                        <label class="form-label">Detail</label>
                                         <textarea asp-for="Detail" class="form-control"></textarea>
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col-md-3 col-lg-3">
-                                    <label class="form-label">"Ranking"</label>
+                                    <label class="form-label">Ranking</label>
                                     <input type="number" asp-for="Ranking" class="form-control" />
                                 </div>
                             </div>
@@ -129,7 +129,7 @@
                     <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
                         <div class="row">
                             <div class="col-lg-6">
-                                <label for="Images" class="form-label">UploadMultipleImages"</label>
+                                <label for="Images" class="form-label">UploadMultipleImages</label>
                                 <input class="form-control" type="file" id="Images" accept="image/*" multiple>
                             </div>
                         </div>
@@ -138,9 +138,9 @@
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        <th class="text-center">"Ranking"</th>
-                                        <th class="text-center text-nowrap">"SavedBy"</th>
-                                        <th class="text-center text-nowrap">"SavedDate"</th>
+                                        <th class="text-center">Ranking</th>
+                                        <th class="text-center text-nowrap">SavedBy</th>
+                                        <th class="text-center text-nowrap">SavedDate</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -152,8 +152,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">"Close"</button>
-                <button id="btnSave" type="button" class="btn btn-success">"Save"</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="btnSave" type="button" class="btn btn-success">Save</button>
             </div>
         </div>
     </div>
@@ -208,7 +208,7 @@
                             return ""
                         }
                     },
-                    { data: "Name", sortable: false },
+                    { data: "ProductName", sortable: false },
                     // { data: "NameTh", sortable: false },
                     {
                         data: "IsActive",
@@ -252,7 +252,7 @@
                         if (o == undefined)
                             return
 
-                        let x = o.Type
+                        let x = o.TypeName
                         if (last !== x) {
                             $(rows).eq(i).before(
                                 "<tr class='group'><td colspan='9'>" + x + "</td></tr>"
@@ -375,7 +375,7 @@
                 $("#Id").val(data.Id)
                 $("#ProductTypeId").val(data.ProductTypeId)
                 // $("#YoutubeUrl").val(data.YoutubeUrl)
-                $("#Name").val(data.Name)
+                $("#ProductName").val(data.ProductName)
                 // $("#NameTh").val(data.NameTh)
                 $("#Title").val(data.Title)
                 // $("#TitleTh").val(data.TitleTh)
@@ -397,6 +397,8 @@
         }
 
         save = () => {
+            debugger
+            
             var data = new FormData();
 
             var files = $("#Images").prop("files");
@@ -408,15 +410,10 @@
 
             data.append("Id", $("#Id").val())
             data.append("ProductTypeId", $("#ProductTypeId").val())
-            // data.append("YoutubeUrl", $.trim($("#YoutubeUrl").val()))
-            data.append("Name", $.trim($("#Name").val()))
-            // data.append("NameTh", $.trim($("#NameTh").val()))
+            data.append("ProductName", $.trim($("#ProductName").val()))
             data.append("Title", $.trim($("#Title").val()))
-            // data.append("TitleTh", $.trim($("#TitleTh").val()))
             data.append("ShortDetail", $.trim($("#ShortDetail").val()))
-            // data.append("ShortDetailTh", $.trim($("#ShortDetailTh").val()))
             data.append("Detail", $("#Detail").summernote("code"))
-            // data.append("DetailTh", $("#DetailTh").summernote("code"))
             data.append("Ranking", $("#Ranking").val())
             data.append("IsActive", $("#IsActive").is(":checked"))
 
@@ -431,7 +428,7 @@
             }
 
             data.append("Rankings", JSON.stringify(rankings))
-
+            debugger
             $.ajax("@Url.Action("Save", "BofProduct")", {
                 data: data,
                 method: "post",

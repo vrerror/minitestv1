@@ -13,7 +13,7 @@ namespace DataAccess.Entities
         public int ProductTypeId { get; set; }
 
         [Column(TypeName = "nvarchar(100)")]
-        public string Name { get; set; }
+        public string ProductName { get; set; }
 
         [Column(TypeName = "nvarchar(120)")]
         public string Title { get; set; }

@@ -11,7 +11,7 @@ namespace Course.Core.Models
     {
         public int Id { get; set; }
         public int ProductTypeId { get; set; }
-        public string Name { get; set; }
+        public string ProductName { get; set; }
         public string Title { get; set; }
         public string ShortDetail { get; set; }
         public string Image { get; set; }

@@ -32,7 +32,7 @@ namespace DataAccess.Da
                 rawType = rawType.Where(w => w.Id == req.TypeId);
 
             if (!string.IsNullOrEmpty(req.Name))
-                raw = raw.Where(w => w.Name.Contains(req.Name) || w.Title.Contains(req.Name));
+                raw = raw.Where(w => w.ProductName.Contains(req.Name) || w.Title.Contains(req.Name));
 
             int count = await raw.CountAsync();
 
@@ -42,7 +42,7 @@ namespace DataAccess.Da
                               select new GetProductDtRes2
                               {
                                   Id = r.Id,
-                                  Name = r.Name,
+                                  ProductName = r.ProductName,
                                   Ranking = r.Ranking,
                                   Title = r.Title,
                                   TypeName = t.Name,
@@ -119,7 +119,7 @@ namespace DataAccess.Da
                               {
                                   Id = r.Id,
                                   ProductTypeId = r.ProductTypeId,
-                                  Name = r.Name,
+                                  ProductName = r.ProductName,
                                   Title = r.Title,
                                   ShortDetail = r.ShortDetail,
                               })
@@ -146,7 +146,7 @@ namespace DataAccess.Da
 
             var data = new GetProductDetailRes
             {
-                Name = r.Name,
+                ProductName = r.ProductName,
                 Title = r.Title,
                 Detail = r.Detail,
                 ShortDetail = r.ShortDetail,
@@ -167,11 +167,11 @@ namespace DataAccess.Da
         {
             var o = await GetById(data.Id);
 
-            if (o.Name != data.Name || o.Title != data.Title || o.ShortDetail != data.ShortDetail 
+            if (o.ProductName != data.ProductName || o.Title != data.Title || o.ShortDetail != data.ShortDetail 
                 || o.Detail != data.Detail || o.IsActive != data.IsActive
                 || o.Ranking != data.Ranking || o.ProductTypeId != data.ProductTypeId)
             {
-                o.Name = data.Name;
+                o.ProductName = data.ProductName;
                 o.Title = data.Title;
                 o.ShortDetail = data.ShortDetail;
                 o.Detail = data.Detail;
